@@ -1,0 +1,5 @@
+Scala/src/lectures/lectures.part1basics/target/*
+.metals/*
+*.class
+*.jar
+Scala/src/playground/target/*
