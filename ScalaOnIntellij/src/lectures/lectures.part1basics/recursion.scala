@@ -1,18 +1,18 @@
 package lecture.part1basics
 import scala.annotation.tailrec // import needed to @tailrec
 
-object  Recursion extends App{
-    @tailrec def factorial(n: Int): Int = { // Fails, not tailrec
-        if (n <= 1) 1
-        else {
-            println("Computing factorial of " + n + " - I first need factorial of " + (n-1))
-            val result = n * factorial(n-1)
-            println("Computed factorial of " + n)
-            result
-        }
-    }
+object  Recursion extends App {
+//    @tailrec def factorial(n: Int): Int = { // Fails, not tailrec
+//        if (n <= 1) 1
+//        else {
+//            println("Computing factorial of " + n + " - I first need factorial of " + (n-1))
+//            val result = n * factorial(n-1)
+//            println("Computed factorial of " + n)
+//            result
+//        }
+//    }
 
-    print(factorial(10))
+//    print(factorial(10))
     //print(factorial(5000)) // Stack overflow
 
     def anotherFactorial(n: Int): BigInt = {
