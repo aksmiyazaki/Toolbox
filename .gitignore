@@ -3,3 +3,4 @@ Scala/src/lectures/lectures.part1basics/target/*
 *.class
 *.jar
 Scala/src/playground/target/*
+.directory
