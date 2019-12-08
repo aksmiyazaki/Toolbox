@@ -1,23 +1,58 @@
 package com.rtjvm.scala.oop.files
 
+import com.rtjvm.scala.oop.filesystem.FilesystemException
+
+import scala.annotation.tailrec
+
 class Directory(override val parentPath:String, override val name: String, val contents:List[DirEntry])
   extends DirEntry (parentPath, name) {
 
-  def replaceEntry(entryName: String, newEntry: Directory): Directory = ???
+  def removeEntry(entryName: String): Directory =
+    if (!hasEntry(entryName)) this
+    else new Directory(parentPath, name, contents.filter(x => !x.name.equals(entryName)))
 
-  def findEntry(entryName: String): DirEntry = ???
 
-  def addEntry(newEntry: DirEntry): Directory = ???
+  def replaceEntry(entryName: String, newEntry: DirEntry): Directory =
+    new Directory(parentPath, name, contents.filter(e => !e.name.equals(entryName)) :+ newEntry)
 
-  def findDescendant(path: List[String]) : Directory = ???
+  def findEntry(entryName: String): DirEntry = {
+    @tailrec def findEntryHelper(name: String, contentList: List[DirEntry]):DirEntry =
+      if(contentList.isEmpty) null
+      else if(contentList.head.name.equals(name)) contentList.head
+      else findEntryHelper(name,contentList.tail)
 
-  def getAllFoldersInPath: List[String] = {
-    path.substring(1).split(Directory.SEPARATOR).toList
+    findEntryHelper(entryName, contents)
   }
 
-  def hasEntry(name: String): Boolean = ???
+  def addEntry(newEntry: DirEntry): Directory =
+    new Directory(parentPath, name, contents :+ newEntry)
 
-  def asDirectory():Directory = this
+  def findDescendant(path: List[String]) : Directory =
+    if(path.isEmpty) this
+    else findEntry(path.head).asDirectory.findDescendant(path.tail)
+
+  def findDescendant(relativePath: String) : Directory =
+    if (relativePath.isEmpty) this
+    else findDescendant(relativePath.split(Directory.SEPARATOR).toList)
+
+  def getAllFoldersInPath: List[String] = {
+    path.substring(1).split(Directory.SEPARATOR).toList.filter(x => !x.isEmpty)
+  }
+
+  def hasEntry(name: String): Boolean =
+    findEntry(name) != null
+
+  def asDirectory: Directory = this
+
+  def asFile: File = throw new FilesystemException("A directory cannot be converted to a file")
+
+  def getType: String = "Directory"
+
+  def isRoot: Boolean = parentPath.isEmpty
+
+  def isDirectory: Boolean = true
+
+  def isFile: Boolean = false
 }
 
 object Directory {
