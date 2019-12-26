@@ -4,3 +4,5 @@ Scala/src/lectures/lectures.part1basics/target/*
 *.jar
 Scala/src/playground/target/*
 .directory
+go_scratchpad/
+py_scratchpad/
